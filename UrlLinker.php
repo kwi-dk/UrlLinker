@@ -92,6 +92,9 @@ function htmlEscapeAndLinkUrls($text)
                 . htmlspecialchars($linkText)
                 . '</a>';
 
+            // Cheap e-mail obfuscation to trick the dumbest mail harvesters.
+            $linkHtml = str_replace('@', '&#64;', $linkHtml);
+            
             // Add the hyperlink.
             $html .= $linkHtml;
         }
