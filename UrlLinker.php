@@ -19,7 +19,8 @@ $rexPort      = '(:[0-9]{1,5})?';
 $rexPath      = '(/[!$-/0-9:;=@_\':;!a-zA-Z\x7f-\xff]*?)?';
 $rexQuery     = '(\?[!$-/0-9:;=@_\':;!a-zA-Z\x7f-\xff]+?)?';
 $rexFragment  = '(#[!$-/0-9:;=@_\':;!a-zA-Z\x7f-\xff]+?)?';
-$rexUrlLinker = "{\\b$rexProtocol$rexDomain$rexPort$rexPath$rexQuery$rexFragment(?=[?.!,;:\"]?(\s|$))}";
+$rexUrl       = "$rexProtocol$rexDomain$rexPort$rexPath$rexQuery$rexFragment";
+$rexUrlLinker = "{\\b$rexUrl(?=[?.!,;:\"]?(\s|$))}";
 
 /**
  *  $validTlds is an associative array mapping valid TLDs to the value true.
@@ -39,7 +40,7 @@ function htmlEscapeAndLinkUrls($text)
 {
     global $rexUrlLinker, $validTlds;
 
-    $result = "";
+    $html = '';
 
     $position = 0;
     while (preg_match($rexUrlLinker, $text, $match, PREG_OFFSET_CAPTURE, $position))
@@ -47,7 +48,7 @@ function htmlEscapeAndLinkUrls($text)
         list($url, $urlPosition) = $match[0];
 
         // Add the text leading up to the URL.
-        $result .= htmlspecialchars(substr($text, $position, $urlPosition - $position));
+        $html .= htmlspecialchars(substr($text, $position, $urlPosition - $position));
 
         $domain = $match[2][0];
         $port   = $match[3][0];
@@ -61,14 +62,14 @@ function htmlEscapeAndLinkUrls($text)
             $completeUrl = $match[1][0] ? $url : "http://$url";
 
             // Add the hyperlink.
-            $result .= '<a href="' . htmlspecialchars($completeUrl) . '">'
+            $html .= '<a href="' . htmlspecialchars($completeUrl) . '">'
                 . htmlspecialchars("$domain$port$path")
                 . '</a>';
         }
         else
         {
             // Not a valid URL.
-            $result .= htmlspecialchars($url);
+            $html .= htmlspecialchars($url);
         }
 
         // Continue text parsing from after the URL.
@@ -76,6 +77,6 @@ function htmlEscapeAndLinkUrls($text)
     }
 
     // Add the remainder of the text.
-    $result .= htmlspecialchars(substr($text, $position));
-    return $result;
+    $html .= htmlspecialchars(substr($text, $position));
+    return $html;
 }
