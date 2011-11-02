@@ -10,6 +10,7 @@
 require("UrlLinker.php");
 
 $text = <<<EOD
+Here's an e-mail-address:bob@example.org. Here's an authenticated URL: http://skroob:12345@example.com.
 Here are some URLs:
 stackoverflow.com/questions/1188129/pregreplace-to-detect-html-php
 Here's the answer: http://www.google.com/search?rls=en&q=42&ie=utf-8&oe=utf-8&hl=en. What was the question?

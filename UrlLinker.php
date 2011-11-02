@@ -19,7 +19,9 @@ $rexPort      = '(:[0-9]{1,5})?';
 $rexPath      = '(/[!$-/0-9:;=@_\':;!a-zA-Z\x7f-\xff]*?)?';
 $rexQuery     = '(\?[!$-/0-9:;=@_\':;!a-zA-Z\x7f-\xff]+?)?';
 $rexFragment  = '(#[!$-/0-9:;=@_\':;!a-zA-Z\x7f-\xff]+?)?';
-$rexUrl       = "$rexProtocol$rexDomain$rexPort$rexPath$rexQuery$rexFragment";
+$rexUsername  = '[^]\\\\\x00-\x20\"(),:-<>[\x7f-\xff]{1,64}';
+$rexPassword  = $rexUsername; // allow the same characters as in the username
+$rexUrl       = "$rexProtocol(?:($rexUsername)(:$rexPassword)?@)?$rexDomain($rexPort$rexPath$rexQuery$rexFragment)";
 $rexUrlLinker = "{\\b$rexUrl(?=[?.!,;:\"]?(\s|$))}";
 
 /**
@@ -50,21 +52,48 @@ function htmlEscapeAndLinkUrls($text)
         // Add the text leading up to the URL.
         $html .= htmlspecialchars(substr($text, $position, $urlPosition - $position));
 
-        $domain = $match[2][0];
-        $port   = $match[3][0];
-        $path   = $match[4][0];
+        $protocol    = $match[1][0];
+        $username    = $match[2][0];
+        $password    = $match[3][0];
+        $domain      = $match[4][0];
+        $afterDomain = $match[5][0]; // everything following the domain
+        $port        = $match[6][0];
+        $path        = $match[7][0];
 
         // Check that the TLD is valid or that $domain is an IP address.
         $tld = strtolower(strrchr($domain, '.'));
         if (preg_match('{^\.[0-9]{1,3}$}', $tld) || isset($validTlds[$tld]))
         {
-            // Prepend http:// if no protocol specified
-            $completeUrl = $match[1][0] ? $url : "http://$url";
+            // Do not permit implicit protocol if a password is specified, as
+            // this causes too many errors (e.g. "my email:foo@example.org").
+            if (!$protocol && $password)
+            {
+                $html .= htmlspecialchars($username);
+                
+                // Continue text parsing at the ':' following the "username".
+                $position = $urlPosition + strlen($username);
+                continue;
+            }
+            
+            if (!$protocol && $username && !$password && !$afterDomain)
+            {
+                // Looks like an email address.
+                $completeUrl = "mailto:$url";
+                $linkText = $url;
+            }
+            else
+            {
+                // Prepend http:// if no protocol specified
+                $completeUrl = $protocol ? $url : "http://$url";
+                $linkText = "$domain$port$path";
+            }
+            
+            $linkHtml = '<a href="' . htmlspecialchars($completeUrl) . '">'
+                . htmlspecialchars($linkText)
+                . '</a>';
 
             // Add the hyperlink.
-            $html .= '<a href="' . htmlspecialchars($completeUrl) . '">'
-                . htmlspecialchars("$domain$port$path")
-                . '</a>';
+            $html .= $linkHtml;
         }
         else
         {
