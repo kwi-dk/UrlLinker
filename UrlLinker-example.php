@@ -18,7 +18,7 @@ A quick look at http://en.wikipedia.org/wiki/URI_scheme#Generic_syntax is helpfu
 There is no place like 127.0.0.1! Except maybe http://news.bbc.co.uk/1/hi/england/surrey/8168892.stm?
 Ports: 192.168.0.1:8080, https://example.net:1234/.
 Beware of Greeks bringing internationalized top-level domains: xn--hxajbheg2az3al.xn--jxalpdlp.
-And remember.Nobody is perfect.
+10.000.000.000 is not an IP-address. Nor is this.a.domain.
 
 <script>alert('Remember kids: Say no to XSS-attacks! Always HTML escape untrusted input!');</script>
 EOD;
