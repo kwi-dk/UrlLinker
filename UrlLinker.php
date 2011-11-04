@@ -14,14 +14,15 @@
  *  Regular expression bits used by htmlEscapeAndLinkUrls() to match URLs.
  */
 $rexProtocol  = '(https?://)?';
-$rexDomain    = '((?:[-a-zA-Z0-9]{1,63}\.)+[-a-zA-Z0-9]{2,63}|(?:[0-9]{1,3}\.){3}[0-9]{1,3})';
+$rexDomain    = '(?:[-a-zA-Z0-9]{1,63}\.)+[-a-zA-Z0-9]{2,63}';
+$rexIp        = '(?:[0-9]{1,3}\.){3}[0-9]{1,3}';
 $rexPort      = '(:[0-9]{1,5})?';
 $rexPath      = '(/[!$-/0-9:;=@_\':;!a-zA-Z\x7f-\xff]*?)?';
 $rexQuery     = '(\?[!$-/0-9:;=@_\':;!a-zA-Z\x7f-\xff]+?)?';
 $rexFragment  = '(#[!$-/0-9:;=@_\':;!a-zA-Z\x7f-\xff]+?)?';
 $rexUsername  = '[^]\\\\\x00-\x20\"(),:-<>[\x7f-\xff]{1,64}';
 $rexPassword  = $rexUsername; // allow the same characters as in the username
-$rexUrl       = "$rexProtocol(?:($rexUsername)(:$rexPassword)?@)?$rexDomain($rexPort$rexPath$rexQuery$rexFragment)";
+$rexUrl       = "$rexProtocol(?:($rexUsername)(:$rexPassword)?@)?($rexDomain|$rexIp)($rexPort$rexPath$rexQuery$rexFragment)";
 $rexUrlLinker = "{\\b$rexUrl(?=[?.!,;:\"]?(\s|$))}";
 
 /**
