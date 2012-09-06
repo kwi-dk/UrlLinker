@@ -23,7 +23,8 @@ $rexFragment  = '(#[!$-/0-9:;=@_\':;!a-zA-Z\x7f-\xff]+?)?';
 $rexUsername  = '[^]\\\\\x00-\x20\"(),:-<>[\x7f-\xff]{1,64}';
 $rexPassword  = $rexUsername; // allow the same characters as in the username
 $rexUrl       = "$rexProtocol(?:($rexUsername)(:$rexPassword)?@)?($rexDomain|$rexIp)($rexPort$rexPath$rexQuery$rexFragment)";
-$rexUrlLinker = "{\\b$rexUrl(?=[?.!,;:\"]?(\s|$))}";
+$rexTrailPunct= '[?.!,;:"]';
+$rexUrlLinker = "{\\b$rexUrl(?=$rexTrailPunct?(\s|$))}";
 
 /**
  *  $validTlds is an associative array mapping valid TLDs to the value true.
