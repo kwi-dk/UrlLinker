@@ -23,8 +23,9 @@ $rexFragment  = '(#[!$-/0-9:;=@_\':;!a-zA-Z\x7f-\xff]+?)?';
 $rexUsername  = '[^]\\\\\x00-\x20\"(),:-<>[\x7f-\xff]{1,64}';
 $rexPassword  = $rexUsername; // allow the same characters as in the username
 $rexUrl       = "$rexProtocol(?:($rexUsername)(:$rexPassword)?@)?($rexDomain|$rexIp)($rexPort$rexPath$rexQuery$rexFragment)";
-$rexTrailPunct= '[?.!,;:"]';
-$rexUrlLinker = "{\\b$rexUrl(?=$rexTrailPunct?(\s|$))}";
+$rexTrailPunct= "[)'?.!,;:]"; // valid URL characters which are not part of the URL if they appear at the very end
+$rexNonUrl    = "[^-_$+.!*'(),;/?:@=&a-zA-Z0-9]"; // characters that should never appear in a URL
+$rexUrlLinker = "{\\b$rexUrl(?=$rexTrailPunct*($rexNonUrl|$))}";
 
 /**
  *  $validTlds is an associative array mapping valid TLDs to the value true.
