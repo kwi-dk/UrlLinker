@@ -13,7 +13,8 @@
 /*
  *  Regular expression bits used by htmlEscapeAndLinkUrls() to match URLs.
  */
-$rexProtocol  = '(https?://)?';
+$rexScheme    = 'https?://';
+// $rexScheme    = "$rexScheme|ftp://"; // Uncomment this line to allow FTP addresses.
 $rexDomain    = '(?:[-a-zA-Z0-9]{1,63}\.)+[a-zA-Z][-a-zA-Z0-9]{1,62}';
 $rexIp        = '(?:[1-9][0-9]{0,2}\.|0\.){3}(?:[1-9][0-9]{0,2}|0)';
 $rexPort      = '(:[0-9]{1,5})?';
@@ -22,7 +23,7 @@ $rexQuery     = '(\?[!$-/0-9:;=@_\':;!a-zA-Z\x7f-\xff]+?)?';
 $rexFragment  = '(#[!$-/0-9:;=@_\':;!a-zA-Z\x7f-\xff]+?)?';
 $rexUsername  = '[^]\\\\\x00-\x20\"(),:-<>[\x7f-\xff]{1,64}';
 $rexPassword  = $rexUsername; // allow the same characters as in the username
-$rexUrl       = "$rexProtocol(?:($rexUsername)(:$rexPassword)?@)?($rexDomain|$rexIp)($rexPort$rexPath$rexQuery$rexFragment)";
+$rexUrl       = "($rexScheme)?(?:($rexUsername)(:$rexPassword)?@)?($rexDomain|$rexIp)($rexPort$rexPath$rexQuery$rexFragment)";
 $rexTrailPunct= "[)'?.!,;:]"; // valid URL characters which are not part of the URL if they appear at the very end
 $rexNonUrl    = "[^-_$+.!*'(),;/?:@=&a-zA-Z0-9]"; // characters that should never appear in a URL
 $rexUrlLinker = "{\\b$rexUrl(?=$rexTrailPunct*($rexNonUrl|$))}";
@@ -55,7 +56,7 @@ function htmlEscapeAndLinkUrls($text)
         // Add the text leading up to the URL.
         $html .= htmlspecialchars(substr($text, $position, $urlPosition - $position));
 
-        $protocol    = $match[1][0];
+        $scheme      = $match[1][0];
         $username    = $match[2][0];
         $password    = $match[3][0];
         $domain      = $match[4][0];
@@ -67,18 +68,18 @@ function htmlEscapeAndLinkUrls($text)
         $tld = strtolower(strrchr($domain, '.'));
         if (preg_match('{^\.[0-9]{1,3}$}', $tld) || isset($validTlds[$tld]))
         {
-            // Do not permit implicit protocol if a password is specified, as
+            // Do not permit implicit scheme if a password is specified, as
             // this causes too many errors (e.g. "my email:foo@example.org").
-            if (!$protocol && $password)
+            if (!$scheme && $password)
             {
                 $html .= htmlspecialchars($username);
-                
+
                 // Continue text parsing at the ':' following the "username".
                 $position = $urlPosition + strlen($username);
                 continue;
             }
-            
-            if (!$protocol && $username && !$password && !$afterDomain)
+
+            if (!$scheme && $username && !$password && !$afterDomain)
             {
                 // Looks like an email address.
                 $completeUrl = "mailto:$url";
@@ -86,18 +87,18 @@ function htmlEscapeAndLinkUrls($text)
             }
             else
             {
-                // Prepend http:// if no protocol specified
-                $completeUrl = $protocol ? $url : "http://$url";
+                // Prepend http:// if no scheme is specified
+                $completeUrl = $scheme ? $url : "http://$url";
                 $linkText = "$domain$port$path";
             }
-            
+
             $linkHtml = '<a href="' . htmlspecialchars($completeUrl) . '">'
                 . htmlspecialchars($linkText)
                 . '</a>';
 
             // Cheap e-mail obfuscation to trick the dumbest mail harvesters.
             $linkHtml = str_replace('@', '&#64;', $linkHtml);
-            
+
             // Add the hyperlink.
             $html .= $linkHtml;
         }

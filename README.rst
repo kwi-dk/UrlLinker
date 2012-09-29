@@ -22,6 +22,9 @@ Recognized addresses
 
     - The ``http://`` prefix is optional.
 
+    - Support for additional schemes, e.g. "ftp", can easily be added by
+      tweaking ``$rexScheme``.
+
   - Hosts may be specified using domain names or IPv4 addresses.
 
     - IPv6 addresses are not supported.
