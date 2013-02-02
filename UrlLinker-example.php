@@ -4,6 +4,7 @@
 <title>UrlLinker Example</title>
 </head>
 <body>
+<!-- Plain text input -->
 <p>
 <?php
 
@@ -21,11 +22,20 @@ Beware of Greeks bringing internationalized top-level domains (xn--hxajbheg2az3a
 10.000.000.000 is not an IP-address. Nor is this.a.domain.
 
 <script>alert('Remember kids: Say no to XSS-attacks! Always HTML escape untrusted input!');</script>
+
 EOD;
 
 print(nl2br(htmlEscapeAndLinkUrls($text)));
-
 ?>
 </p>
+<!-- HTML input -->
+<?php
+$html = <<<EOD
+<p>Send me an <a href="bob@example.com">e-mail</a> at bob@example.com.</p>
+<p>This is already a link: <a href="http://google.com">http://google.com</a></p>
+<p title='10>20'>Tricky markup...</p>
+EOD;
+print(linkUrlsInTrustedHtml($html));
+?>
 </body>
 </html>
