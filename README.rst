@@ -58,6 +58,12 @@ Recognized addresses
       policy of selling arbitrary TLDs for large amounts of cash, but for now
       it is an effective method of rejecting invalid URLs.
 
+    - If you need to support unqualified domain names, such as ``localhost``,
+      you may disable the TLD check by 1) replacing ``+`` with ``*`` in the
+      ``$rexDomain`` value and 2) replacing the ``if`` statement line beneath
+      the "Check that the TLD is valid" comment with ``if (true)``. This is
+      obviously a quick-and-dirty hack, and may cause false positives.
+
 - Email addresses
 
   - Supports the full range of commonly used address formats, including "plus
