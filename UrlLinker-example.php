@@ -23,6 +23,7 @@ Beware of Greeks bringing internationalized top-level domains (xn--hxajbheg2az3a
 
 <script>alert('Remember kids: Say no to XSS-attacks! Always HTML escape untrusted input!');</script>
 
+https://mail.google.com/mail/u/0/#starred?compose=141d598cd6e13025
 EOD;
 
 print(nl2br(htmlEscapeAndLinkUrls($text)));
