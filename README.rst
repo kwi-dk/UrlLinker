@@ -49,6 +49,9 @@ Recognized addresses
 
   - Port numbers are allowed.
 
+  - Internationalized Resource Identifiers (IRIs) are allowed. Note that the
+    job of converting IRIs to URIs is left to the user's browser.
+
   - To reduce false positives, UrlLinker verifies that the top-level domain is
     on the official IANA list of valid TLDs.
 
@@ -57,6 +60,9 @@ Recognized addresses
     - In the future, this approach may collapse under ICANN's ill-advised new
       policy of selling arbitrary TLDs for large amounts of cash, but for now
       it is an effective method of rejecting invalid URLs.
+
+    - Internationalized *top-level* domain names must be written in Punycode in
+      order to be recognized.
 
     - If you need to support unqualified domain names, such as ``localhost``,
       you may disable the TLD check by 1) replacing ``+`` with ``*`` in the
