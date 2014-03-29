@@ -25,6 +25,8 @@ Beware of Greeks bringing internationalized top-level domains (xn--hxajbheg2az3a
 <script>alert('Remember kids: Say no to XSS-attacks! Always HTML escape untrusted input!');</script>
 
 https://mail.google.com/mail/u/0/#starred?compose=141d598cd6e13025
+https://www.google.com/search?q=bla%20bla%20bla
+https://www.google.com/search?q=bla+bla+bla
 
 We need to support IDNs and IRIs and röck döts:
 møøse.kwi.dk/阿驼鹿一旦咬了我的妹妹/من-اليمين-إلى-اليسار-لغات-تخلط-لي.
