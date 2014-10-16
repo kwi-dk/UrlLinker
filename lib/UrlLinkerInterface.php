@@ -11,8 +11,8 @@ interface UrlLinkerInterface
     public function linkUrlsAndEscapeHtml($text);
 
     /**
-     * @param string $text
+     * @param string $html
      * @return string
      */
-    public function linkUrlsInTrustedHtml($text);
+    public function linkUrlsInTrustedHtml($html);
 }
