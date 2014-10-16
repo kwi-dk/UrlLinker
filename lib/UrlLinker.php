@@ -31,13 +31,21 @@ class UrlLinker implements UrlLinkerInterface
         return static::$instance;
     }
 
-    public function __construct()
+    /**
+     * @param bool $allowFtpAddresses
+     * @param bool $allowUpperCaseUrlSchemes e.g. "HTTP://google.com"
+     */
+    public function __construct($allowFtpAddresses = false, $allowUpperCaseUrlSchemes = false)
     {
         /**
-         * Regular expression bits used by htmlEscapeAndLinkUrls() to match URLs.
+         * Regular expression bits used by linkUrlsAndEscapeHtml() to match URLs.
          */
-        $rexScheme     = 'https?://';
-        //$rexScheme     = "$rexScheme|ftp://"; // Uncomment this line to allow FTP addresses.
+        $rexScheme = 'https?://';
+
+        if ($allowFtpAddresses) {
+            $rexScheme .= "|ftp://";
+        }
+
         $rexDomain     = '(?:[-a-zA-Z0-9\x7f-\xff]{1,63}\.)+[a-zA-Z\x7f-\xff][-a-zA-Z0-9\x7f-\xff]{1,62}';
         $rexIp         = '(?:[1-9][0-9]{0,2}\.|0\.){3}(?:[1-9][0-9]{0,2}|0)';
         $rexPort       = '(:[0-9]{1,5})?';
@@ -51,7 +59,10 @@ class UrlLinker implements UrlLinkerInterface
         $rexNonUrl     = "[^-_#$+.!*%'(),;/?:@=&a-zA-Z0-9\x7f-\xff]"; // characters that should never appear in a URL
 
         $this->rexUrlLinker = "{\\b$rexUrl(?=$rexTrailPunct*($rexNonUrl|$))}";
-        //$this->rexUrlLinker .= 'i'; // Uncomment this line to allow uppercase URL schemes (e.g. "HTTP://google.com").
+
+        if ($allowUpperCaseUrlSchemes) {
+            $this->rexUrlLinker .= 'i';
+        }
 
         /**
          * $validTlds is an associative array mapping valid TLDs to the value true.
