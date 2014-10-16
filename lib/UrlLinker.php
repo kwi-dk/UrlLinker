@@ -65,6 +65,9 @@ class UrlLinker implements UrlLinkerInterface
     }
 
     /**
+     * Transforms plain text into valid HTML, escaping special characters and
+     * turning URLs into links.
+     *
      * @param string $text
      * @return string
      */
@@ -140,6 +143,11 @@ class UrlLinker implements UrlLinkerInterface
     }
 
     /**
+     * Turns URLs into links in a piece of valid HTML/XHTML.
+     *
+     * Beware: Never render HTML from untrusted sources. Rendering HTML provided by
+     * a malicious user can lead to system compromise through cross-site scripting.
+     *
      * @param string $html
      * @return string
      */
