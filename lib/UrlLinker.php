@@ -90,7 +90,7 @@ class UrlLinker implements UrlLinkerInterface
             list($url, $urlPosition) = $match[0];
 
             // Add the text leading up to the URL.
-            $html .= htmlspecialchars(substr($text, $position, $urlPosition - $position));
+            $html .= $this->escapeHtml(substr($text, $position, $urlPosition - $position));
 
             $scheme      = $match[1][0];
             $username    = $match[2][0];
@@ -107,7 +107,7 @@ class UrlLinker implements UrlLinkerInterface
                 // Do not permit implicit scheme if a password is specified, as
                 // this causes too many errors (e.g. "my email:foo@example.org").
                 if (!$scheme && $password) {
-                    $html .= htmlspecialchars($username);
+                    $html .= $this->escapeHtml($username);
 
                     // Continue text parsing at the ':' following the "username".
                     $position = $urlPosition + strlen($username);
@@ -125,8 +125,8 @@ class UrlLinker implements UrlLinkerInterface
                     $linkText = "$domain$port$path";
                 }
 
-                $linkHtml = '<a href="'.htmlspecialchars($completeUrl).'">'
-                    .htmlspecialchars($linkText)
+                $linkHtml = '<a href="'.$this->escapeHtml($completeUrl).'">'
+                    .$this->escapeHtml($linkText)
                     .'</a>';
 
                 // Cheap e-mail obfuscation to trick the dumbest mail harvesters.
@@ -136,7 +136,7 @@ class UrlLinker implements UrlLinkerInterface
                 $html .= $linkHtml;
             } else {
                 // Not a valid URL.
-                $html .= htmlspecialchars($url);
+                $html .= $this->escapeHtml($url);
             }
 
             // Continue text parsing from after the URL.
@@ -144,7 +144,7 @@ class UrlLinker implements UrlLinkerInterface
         }
 
         // Add the remainder of the text.
-        $html .= htmlspecialchars(substr($text, $position));
+        $html .= $this->escapeHtml(substr($text, $position));
 
         return $html;
     }
@@ -201,5 +201,14 @@ class UrlLinker implements UrlLinkerInterface
         }
 
         return $result;
+    }
+
+    /**
+     * @param string $string
+     * @return string
+     */
+    private function escapeHtml($string)
+    {
+        return htmlspecialchars($string);
     }
 }
