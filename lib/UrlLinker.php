@@ -125,15 +125,8 @@ class UrlLinker implements UrlLinkerInterface
                     $linkText = "$domain$port$path";
                 }
 
-                $linkHtml = '<a href="'.$this->escapeHtml($completeUrl).'">'
-                    .$this->escapeHtml($linkText)
-                    .'</a>';
-
-                // Cheap e-mail obfuscation to trick the dumbest mail harvesters.
-                $linkHtml = str_replace('@', '&#64;', $linkHtml);
-
                 // Add the hyperlink.
-                $html .= $linkHtml;
+                $html .= $this->createHtmlLink($completeUrl, $linkText);
             } else {
                 // Not a valid URL.
                 $html .= $this->escapeHtml($url);
@@ -201,6 +194,21 @@ class UrlLinker implements UrlLinkerInterface
         }
 
         return $result;
+    }
+
+    /**
+     * @param string $url
+     * @param string $content
+     * @return string
+     */
+    private function createHtmlLink($url, $content)
+    {
+        $link = '<a href="'.$this->escapeHtml($url).'">'
+            .$this->escapeHtml($content)
+            .'</a>';
+
+        // Cheap e-mail obfuscation to trick the dumbest mail harvesters.
+        return str_replace('@', '&#64;', $link);
     }
 
     /**
