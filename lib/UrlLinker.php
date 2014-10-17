@@ -203,9 +203,11 @@ class UrlLinker implements UrlLinkerInterface
      */
     private function createHtmlLink($url, $content)
     {
-        $link = '<a href="'.$this->escapeHtml($url).'">'
-            .$this->escapeHtml($content)
-            .'</a>';
+        $link = sprintf(
+            '<a href="%s">%s</a>',
+            $this->escapeHtml($url),
+            $this->escapeHtml($content)
+        );
 
         // Cheap e-mail obfuscation to trick the dumbest mail harvesters.
         return str_replace('@', '&#64;', $link);
