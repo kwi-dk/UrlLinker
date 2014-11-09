@@ -24,4 +24,19 @@ class UrlLinkerTest extends PHPUnit_Framework_TestCase
 
         $this->assertNotSame(new UrlLinker(), $urlLinkerSingleton1);
     }
+
+    public function testAllowingFtpAddresses()
+    {
+        $urlLinker = new UrlLinker(true);
+
+        $text = '<div>ftp://example.com</div>';
+        $expectedText = '&lt;div&gt;<a href="ftp://example.com">example.com</a>&lt;/div&gt;';
+
+        $this->assertSame($expectedText, $urlLinker->linkUrlsAndEscapeHtml($text));
+
+        $html = '<div>ftp://example.com</div>';
+        $expectedHtml = '<div><a href="ftp://example.com">example.com</a></div>';
+
+        $this->assertSame($expectedHtml, $urlLinker->linkUrlsInTrustedHtml($html));
+    }
 }
