@@ -42,19 +42,15 @@ class UrlLinkerTest extends PHPUnit_Framework_TestCase
 
     public function testAllowingUpperCaseSchemes()
     {
-        $urlLinker = new UrlLinker(true);
+        $urlLinker = new UrlLinker(false, true);
 
-        // bug: to be fixed
         $text = '<div>HTTP://example.com</div>';
-        //$expectedText = '&lt;div&gt;<a href="http://example.com">example.com</a>&lt;/div&gt;';
-        $expectedText = '&lt;div&gt;HTTP://<a href="http://example.com">example.com</a>&lt;/div&gt;';
+        $expectedText = '&lt;div&gt;<a href="HTTP://example.com">example.com</a>&lt;/div&gt;';
 
         $this->assertSame($expectedText, $urlLinker->linkUrlsAndEscapeHtml($text));
 
-        // bug: to be fixed
         $html = '<div>HTTP://example.com</div>';
-        //$expectedHtml = '<div><a href="http://example.com">example.com</a></div>';
-        $expectedHtml = '<div>HTTP://<a href="http://example.com">example.com</a></div>';
+        $expectedHtml = '<div><a href="HTTP://example.com">example.com</a></div>';
 
         $this->assertSame($expectedHtml, $urlLinker->linkUrlsInTrustedHtml($html));
     }
