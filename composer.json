@@ -1,0 +1,40 @@
+{
+    "name": "kwi/urllinker",
+    "description": "Autolink URLs in text or html",
+    "type": "library",
+    "license": "CC0-1.0",
+    "homepage": "http://www.kwi.dk/projects/php/UrlLinker/",
+    "authors": [
+        {
+            "name": "Søren Løvborg",
+            "role": "Developer"
+        },
+        {
+            "name": "Dawid Nowak",
+            "email": "code@dnowak.pl",
+            "role": "Developer"
+        }
+    ],
+    "support": {
+        "source": "https://bitbucket.org/kwi/urllinker",
+        "issues": "https://bitbucket.org/kwi/urllinker/issues"
+    },
+    "require": {
+        "php": ">=5.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Kwi\\": "lib"
+        },
+        "files": [
+            "UrlLinker.php"
+        ]
+    },
+    "autoload-dev": {
+        "files": [
+            "tests/UrlLinkerTestCase.php",
+            "tests/functions/LinkUrlsInTrustedHtmlTest.php",
+            "tests/functions/HtmlEscapeAndLinkUrlsTest.php"
+        ]
+    }
+}

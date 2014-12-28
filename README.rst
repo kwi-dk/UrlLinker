@@ -4,7 +4,27 @@ UrlLinker
 UrlLinker is a PHP module for converting plain text snippets to HTML, and any
 web addresses in the text into HTML hyperlinks.
 
-Usage::
+
+Installing
+------------
+
+1. Download the lib using [Composer](https://getcomposer.org/):
+
+    ```
+    composer require kwi/urllinker
+    ```
+
+2. In your PHP file require Composer's autoloader:
+
+    ```
+    <?php
+
+    require_once __DIR__.'/vendor/autoload.php';
+    ```
+
+
+Usage (procedural API)
+----------------------
 
     print(htmlEscapeAndLinkUrls($text));
 
@@ -26,6 +46,49 @@ untrusted input via PHP's `strip_tags`__ function.)
 
 __ http://en.wikipedia.org/wiki/Cross-site_scripting
 __ http://php.net/strip-tags
+
+
+Usage (object oriented API)
+---------------------------
+
+```
+$urlLinker = new Kwi\UrlLinker();
+
+$urlLinker->linkUrlsAndEscapeHtml($text);
+
+$urlLinker->linkUrlsInTrustedHtml($html);
+```
+
+In your functions, you can depend on `UrlLinkerInterface`:
+
+```
+class Example
+{
+    private $urlLinker;
+
+    public function __construct(Kwi\UrlLinkerInterface $urlLinker)
+    {
+        $this->urlLinker = $urlLinker;
+    }
+
+    public function doStuff($text)
+    {
+        // do sth with $text…
+
+        return $this->urlLinker->linkUrlsAndEscapeHtml($text);
+    }
+}
+```
+
+You can configure different options for parsing URLs by passing them into `UrlLinker`'s constructor:
+
+```
+// Ftp addresses like "ftp://example.com" will be allowed:
+$urlLinker = new Kwi\UrlLinker(true);
+
+// Uppercase URL schemes like "HTTP://exmaple.com" will be allowed:
+$urlLinker = new Kwi\UrlLinker(false, true);
+```
 
 
 Recognized addresses
@@ -92,6 +155,17 @@ Recognized addresses
 __ http://en.wikipedia.org/wiki/Cross-site_scripting
 __ http://www.htmlhelp.com/tools/validator/problems.html#amp
 
+
+Tests
+-----
+
+Unit tests are written using [PHPUnit](https://phpunit.de).
+
+```
+$ cd PATH_TO_URL_LINKER
+$ composer install
+$ phpunit
+```
 
 Background
 ----------
