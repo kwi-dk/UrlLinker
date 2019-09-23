@@ -16,8 +16,8 @@
         }
     ],
     "support": {
-        "source": "https://bitbucket.org/kwi/urllinker",
-        "issues": "https://bitbucket.org/kwi/urllinker/issues"
+        "source": "https://github.com/kwi-dk/UrlLinker",
+        "issues": "https://github.com/kwi-dk/UrlLinker/issues"
     },
     "require": {
         "php": ">=5.3"
