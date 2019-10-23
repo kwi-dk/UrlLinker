@@ -27,6 +27,11 @@ untrusted input via PHP's `strip_tags`__ function.)
 __ http://en.wikipedia.org/wiki/Cross-site_scripting
 __ http://php.net/strip-tags
 
+Note: This repository is no longer being actively maintained. If you want to
+use UrlLinker with Composer, consider `this fork`__.
+
+__ https://github.com/MacDada/UrlLinker
+
 
 Recognized addresses
 --------------------
